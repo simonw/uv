@@ -1051,6 +1051,7 @@ async fn run(mut cli: Cli) -> Result<ExitStatus> {
                 globals.python_downloads,
                 globals.native_tls,
                 globals.connectivity,
+                vec![], // TODO(zanieb): Add support for trusted hosts here
                 cli.top_level.no_config,
                 printer,
             )
@@ -1236,6 +1237,7 @@ async fn run_project(
                 globals.python_preference,
                 globals.python_downloads,
                 globals.connectivity,
+                vec![], // TODO(zanieb): Add support for trusted hosts here
                 globals.native_tls,
                 &cache,
                 printer,

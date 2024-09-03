@@ -47,6 +47,7 @@ pub(crate) async fn init(
     python_preference: PythonPreference,
     python_downloads: PythonDownloads,
     connectivity: Connectivity,
+    allow_insecure_host: Vec<TrustedHost>,
     native_tls: bool,
     cache: &Cache,
     printer: Printer,
@@ -125,11 +126,12 @@ pub(crate) async fn init(
                 python_preference,
                 python_downloads,
                 connectivity,
-                native_tls,
-                cache,
-                printer,
-            )
-            .await?;
+                allow_insecure_host,
+        native_tls,
+        cache,
+        printer,
+    )
+    .await?;
 
             // Create the `README.md` if it does not already exist.
             if !no_readme {
@@ -257,6 +259,7 @@ async fn init_project(
     python_preference: PythonPreference,
     python_downloads: PythonDownloads,
     connectivity: Connectivity,
+    allow_insecure_host: Vec<TrustedHost>,
     native_tls: bool,
     cache: &Cache,
     printer: Printer,

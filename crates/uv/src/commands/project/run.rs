@@ -108,6 +108,11 @@ pub(crate) async fn run(
     // Initialize any output reporters.
     let download_reporter = PythonDownloadReporter::single(printer);
 
+    let client_builder = BaseClientBuilder::new()
+        .connectivity(connectivity)
+        .native_tls(native_tls)
+        .allow_insecure_host(settings.allow_insecure_host.clone());
+
     // Determine whether the command to execute is a PEP 723 script.
     let temp_dir;
     let script_interpreter = if let Some(script) = script {
@@ -160,10 +165,6 @@ pub(crate) async fn run(
             let source = PythonRequestSource::RequiresPython;
             (source, request)
         };
-
-        let client_builder = BaseClientBuilder::new()
-            .connectivity(connectivity)
-            .native_tls(native_tls);
 
         let interpreter = PythonInstallation::find_or_download(
             python_request.as_ref(),
@@ -465,9 +466,6 @@ pub(crate) async fn run(
 
                 // If we're isolating the environment, use an ephemeral virtual environment as the
                 // base environment for the project.
-                let client_builder = BaseClientBuilder::new()
-                    .connectivity(connectivity)
-                    .native_tls(native_tls);
 
                 // Resolve the Python request and requirement for the workspace.
                 let WorkspacePython {
@@ -616,10 +614,6 @@ pub(crate) async fn run(
             debug!("No project found; searching for Python interpreter");
 
             let interpreter = {
-                let client_builder = BaseClientBuilder::new()
-                    .connectivity(connectivity)
-                    .native_tls(native_tls);
-
                 // (1) Explicit request from user
                 let python_request = if let Some(request) = python.as_deref() {
                     Some(PythonRequest::parse(request))
@@ -678,10 +672,6 @@ pub(crate) async fn run(
     let spec = if requirements.is_empty() {
         None
     } else {
-        let client_builder = BaseClientBuilder::new()
-            .connectivity(connectivity)
-            .native_tls(native_tls);
-
         let spec =
             RequirementsSpecification::from_simple_sources(&requirements, &client_builder).await?;
 

@@ -96,6 +96,12 @@ pub(crate) async fn add(
         }
     }
 
+    let client_builder = BaseClientBuilder::new()
+        .connectivity(connectivity)
+        .native_tls(native_tls)
+        .keyring(settings.keyring_provider)
+        .allow_insecure_host(settings.allow_insecure_host.clone());
+
     let reporter = PythonDownloadReporter::single(printer);
 
     let target = if let Some(script) = script {
@@ -120,10 +126,6 @@ pub(crate) async fn add(
                 "`--no-sync` is a no-op for Python scripts with inline metadata, which always run in isolation"
             );
         }
-
-        let client_builder = BaseClientBuilder::new()
-            .connectivity(connectivity)
-            .native_tls(native_tls);
 
         // If we found a script, add to the existing metadata. Otherwise, create a new inline
         // metadata tag.
@@ -222,11 +224,6 @@ pub(crate) async fn add(
 
         Target::Project(project, venv)
     };
-
-    let client_builder = BaseClientBuilder::new()
-        .connectivity(connectivity)
-        .native_tls(native_tls)
-        .keyring(settings.keyring_provider);
 
     // Read the requirements.
     let RequirementsSpecification { requirements, .. } =

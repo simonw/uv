@@ -27,6 +27,7 @@ pub(crate) async fn install(
     python_downloads: PythonDownloads,
     native_tls: bool,
     connectivity: Connectivity,
+    allow_insecure_host: Vec<TrustedHost>,
     no_config: bool,
     printer: Printer,
 ) -> Result<ExitStatus> {
@@ -135,6 +136,7 @@ pub(crate) async fn install(
     let client = uv_client::BaseClientBuilder::new()
         .connectivity(connectivity)
         .native_tls(native_tls)
+        .allow_insecure_host(allow_insecure_host)
         .build();
 
     let reporter = PythonDownloadReporter::new(printer, downloads.len() as u64);
