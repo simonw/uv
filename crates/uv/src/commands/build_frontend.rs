@@ -55,9 +55,8 @@ pub(crate) async fn build_frontend(
     no_config: bool,
     python_preference: PythonPreference,
     python_downloads: PythonDownloads,
-    connectivity: Connectivity,
+    base_client_builder: BaseClientBuilder<'_>,
     concurrency: Concurrency,
-    native_tls: bool,
     cache: &Cache,
     printer: Printer,
 ) -> Result<ExitStatus> {
@@ -117,9 +116,8 @@ async fn build_impl(
     no_config: bool,
     python_preference: PythonPreference,
     python_downloads: PythonDownloads,
-    connectivity: Connectivity,
+    base_client_builder: BaseClientBuilder<'_>,
     concurrency: Concurrency,
-    native_tls: bool,
     cache: &Cache,
     printer: Printer,
 ) -> Result<BuildResult> {

@@ -78,9 +78,8 @@ pub(crate) async fn lock(
     settings: ResolverSettings,
     python_preference: PythonPreference,
     python_downloads: PythonDownloads,
-    connectivity: Connectivity,
+    base_client_builder: BaseClientBuilder<'_>,
     concurrency: Concurrency,
-    native_tls: bool,
     cache: &Cache,
     printer: Printer,
 ) -> anyhow::Result<ExitStatus> {
@@ -161,9 +160,8 @@ pub(super) async fn do_safe_lock(
     bounds: LowerBound,
     state: &SharedState,
     logger: Box<dyn ResolveLogger>,
-    connectivity: Connectivity,
+    base_client_builder: BaseClientBuilder<'_>,
     concurrency: Concurrency,
-    native_tls: bool,
     cache: &Cache,
     printer: Printer,
 ) -> Result<LockResult, ProjectError> {
@@ -241,9 +239,8 @@ async fn do_lock(
     bounds: LowerBound,
     state: &SharedState,
     logger: Box<dyn ResolveLogger>,
-    connectivity: Connectivity,
+    base_client_builder: BaseClientBuilder<'_>,
     concurrency: Concurrency,
-    native_tls: bool,
     cache: &Cache,
     printer: Printer,
 ) -> Result<LockResult, ProjectError> {

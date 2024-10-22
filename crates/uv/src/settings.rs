@@ -55,6 +55,7 @@ pub(crate) struct GlobalSettings {
     pub(crate) native_tls: bool,
     pub(crate) concurrency: Concurrency,
     pub(crate) connectivity: Connectivity,
+    pub(crate) allow_insecure_host: Vec<TrustedHost>,
     pub(crate) show_settings: bool,
     pub(crate) preview: PreviewMode,
     pub(crate) python_preference: PythonPreference,
@@ -116,6 +117,10 @@ impl GlobalSettings {
             } else {
                 Connectivity::Online
             },
+            allow_insecure_host: args
+                .allow_insecure_host
+                .combine(workspace.and_then(|workspace| workspace.globals.allow_insecure_host))
+                .unwrap_or_default(),
             show_settings: args.show_settings,
             preview,
             python_preference: args
@@ -2052,7 +2057,6 @@ pub(crate) struct ResolverInstallerSettings {
     pub(crate) index_locations: IndexLocations,
     pub(crate) index_strategy: IndexStrategy,
     pub(crate) keyring_provider: KeyringProviderType,
-    pub(crate) allow_insecure_host: Vec<TrustedHost>,
     pub(crate) resolution: ResolutionMode,
     pub(crate) prerelease: PrereleaseMode,
     pub(crate) dependency_metadata: DependencyMetadata,

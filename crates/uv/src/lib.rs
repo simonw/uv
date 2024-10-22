@@ -22,6 +22,7 @@ use uv_cli::{
 use uv_cli::{PythonCommand, PythonNamespace, ToolCommand, ToolNamespace, TopLevelArgs};
 #[cfg(feature = "self-update")]
 use uv_cli::{SelfCommand, SelfNamespace, SelfUpdateArgs};
+use uv_client::BaseClientBuilder;
 use uv_fs::CWD;
 use uv_requirements::RequirementsSource;
 use uv_scripts::{Pep723Item, Pep723Metadata, Pep723Script};
@@ -234,6 +235,11 @@ async fn run(mut cli: Cli) -> Result<ExitStatus> {
     } else {
         uv_warnings::enable();
     }
+
+    let base_client_builder = BaseClientBuilder::new()
+        .connectivity(globals.connectivity)
+        .native_tls(globals.native_tls)
+        .allow_insecure_host(globals.allow_insecure_host);
 
     anstream::ColorChoice::write_global(globals.color.into());
 

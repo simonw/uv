@@ -10,6 +10,7 @@ use std::path::Path;
 use tracing::debug;
 
 use uv_client::Connectivity;
+use uv_configuration::TrustedHost;
 use uv_python::downloads::{DownloadResult, ManagedPythonDownload, PythonDownloadRequest};
 use uv_python::managed::{ManagedPythonInstallation, ManagedPythonInstallations};
 use uv_python::{PythonDownloads, PythonRequest, PythonVersionFile};

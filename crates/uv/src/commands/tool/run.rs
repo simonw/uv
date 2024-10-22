@@ -74,9 +74,8 @@ pub(crate) async fn run(
     isolated: bool,
     python_preference: PythonPreference,
     python_downloads: PythonDownloads,
-    connectivity: Connectivity,
+    base_client_builder: BaseClientBuilder<'_>,
     concurrency: Concurrency,
-    native_tls: bool,
     cache: Cache,
     printer: Printer,
 ) -> anyhow::Result<ExitStatus> {
@@ -390,9 +389,8 @@ async fn get_or_create_environment(
     isolated: bool,
     python_preference: PythonPreference,
     python_downloads: PythonDownloads,
-    connectivity: Connectivity,
+    base_client_builder: BaseClientBuilder<'_>,
     concurrency: Concurrency,
-    native_tls: bool,
     cache: &Cache,
     printer: Printer,
 ) -> Result<(Requirement, PythonEnvironment), ProjectError> {

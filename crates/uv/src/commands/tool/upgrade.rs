@@ -67,7 +67,8 @@ pub(crate) async fn upgrade(
     let reporter = PythonDownloadReporter::single(printer);
     let client_builder = BaseClientBuilder::new()
         .connectivity(connectivity)
-        .native_tls(native_tls);
+        .native_tls(native_tls)
+        .allow_insecure_host(allow_insecure_host);
 
     let python_request = python.as_deref().map(PythonRequest::parse);
 
@@ -186,9 +187,8 @@ async fn upgrade_tool(
     args: &ResolverInstallerOptions,
     cache: &Cache,
     filesystem: &ResolverInstallerOptions,
-    connectivity: Connectivity,
+    base_client_builder: BaseClientBuilder<'_>,
     concurrency: Concurrency,
-    native_tls: bool,
 ) -> Result<UpgradeOutcome> {
     // Ensure the tool is installed.
     let existing_tool_receipt = match installed_tools.get_tool_receipt(name) {

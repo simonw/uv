@@ -70,7 +70,7 @@ pub(crate) async fn add(
     script: Option<PathBuf>,
     python_preference: PythonPreference,
     python_downloads: PythonDownloads,
-    connectivity: Connectivity,
+    base_client_builder: BaseClientBuilder<'_>,
     concurrency: Concurrency,
     native_tls: bool,
     cache: &Cache,
@@ -96,11 +96,9 @@ pub(crate) async fn add(
         }
     }
 
-    let client_builder = BaseClientBuilder::new()
-        .connectivity(connectivity)
+    let client_builder = base_client_builder
         .native_tls(native_tls)
-        .keyring(settings.keyring_provider)
-        .allow_insecure_host(settings.allow_insecure_host.clone());
+        .keyring(settings.keyring_provider);
 
     let reporter = PythonDownloadReporter::single(printer);
 
@@ -649,9 +647,8 @@ async fn lock_and_sync(
     raw_sources: bool,
     settings: ResolverInstallerSettingsRef<'_>,
     bounds: LowerBound,
-    connectivity: Connectivity,
+    base_client_builder: BaseClientBuilder<'_>,
     concurrency: Concurrency,
-    native_tls: bool,
     cache: &Cache,
     printer: Printer,
 ) -> Result<(), ProjectError> {

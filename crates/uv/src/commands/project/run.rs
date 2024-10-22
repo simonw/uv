@@ -74,9 +74,8 @@ pub(crate) async fn run(
     settings: ResolverInstallerSettings,
     python_preference: PythonPreference,
     python_downloads: PythonDownloads,
-    connectivity: Connectivity,
+    base_client_builder: BaseClientBuilder<'_>,
     concurrency: Concurrency,
-    native_tls: bool,
     cache: &Cache,
     printer: Printer,
 ) -> anyhow::Result<ExitStatus> {
@@ -107,11 +106,6 @@ pub(crate) async fn run(
 
     // Initialize any output reporters.
     let download_reporter = PythonDownloadReporter::single(printer);
-
-    let client_builder = BaseClientBuilder::new()
-        .connectivity(connectivity)
-        .native_tls(native_tls)
-        .allow_insecure_host(settings.allow_insecure_host.clone());
 
     // Determine whether the command to execute is a PEP 723 script.
     let temp_dir;
@@ -171,7 +165,7 @@ pub(crate) async fn run(
             EnvironmentPreference::Any,
             python_preference,
             python_downloads,
-            &client_builder,
+            &base_client_builder,
             cache,
             Some(&download_reporter),
         )
@@ -1174,6 +1168,7 @@ impl RunCommand {
                 let client = BaseClientBuilder::new()
                     .connectivity(connectivity)
                     .native_tls(native_tls)
+                    .allow_insecure_host(allow_insecure_host)
                     .build();
                 let response = client.for_host(&url).get(url.clone()).send().await?;
 

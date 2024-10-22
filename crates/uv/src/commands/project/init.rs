@@ -9,7 +9,9 @@ use tracing::{debug, warn};
 use uv_cache::Cache;
 use uv_cli::AuthorFrom;
 use uv_client::{BaseClientBuilder, Connectivity};
-use uv_configuration::{ProjectBuildBackend, VersionControlError, VersionControlSystem};
+use uv_configuration::{
+    ProjectBuildBackend, TrustedHost, VersionControlError, VersionControlSystem,
+};
 use uv_fs::{Simplified, CWD};
 use uv_git::GIT;
 use uv_pep440::Version;
@@ -127,11 +129,11 @@ pub(crate) async fn init(
                 python_downloads,
                 connectivity,
                 allow_insecure_host,
-        native_tls,
-        cache,
-        printer,
-    )
-    .await?;
+                native_tls,
+                cache,
+                printer,
+            )
+            .await?;
 
             // Create the `README.md` if it does not already exist.
             if !no_readme {
@@ -194,7 +196,8 @@ async fn init_script(
     }
     let client_builder = BaseClientBuilder::new()
         .connectivity(connectivity)
-        .native_tls(native_tls);
+        .native_tls(native_tls)
+        .allow_insecure_host(allow_insecure_host);
 
     let reporter = PythonDownloadReporter::single(printer);
 
@@ -310,7 +313,8 @@ async fn init_project(
     let reporter = PythonDownloadReporter::single(printer);
     let client_builder = BaseClientBuilder::new()
         .connectivity(connectivity)
-        .native_tls(native_tls);
+        .native_tls(native_tls)
+        .allow_insecure_host(allow_insecure_host);
 
     // Add a `requires-python` field to the `pyproject.toml` and return the corresponding interpreter.
     let (requires_python, python_request) = if let Some(request) = python.as_deref() {

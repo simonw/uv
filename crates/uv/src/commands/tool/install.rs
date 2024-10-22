@@ -46,17 +46,11 @@ pub(crate) async fn install(
     settings: ResolverInstallerSettings,
     python_preference: PythonPreference,
     python_downloads: PythonDownloads,
-    connectivity: Connectivity,
+    base_client_builder: BaseClientBuilder<'_>,
     concurrency: Concurrency,
-    native_tls: bool,
     cache: Cache,
     printer: Printer,
 ) -> Result<ExitStatus> {
-    let client_builder = BaseClientBuilder::new()
-        .connectivity(connectivity)
-        .native_tls(native_tls)
-        .allow_insecure_host(settings.allow_insecure_host.clone());
-
     let reporter = PythonDownloadReporter::single(printer);
 
     let python_request = python.as_deref().map(PythonRequest::parse);
@@ -68,7 +62,7 @@ pub(crate) async fn install(
         EnvironmentPreference::OnlySystem,
         python_preference,
         python_downloads,
-        &client_builder,
+        &base_client_builder,
         &cache,
         Some(&reporter),
     )
@@ -97,17 +91,17 @@ pub(crate) async fn install(
             } else {
                 RequirementsSource::Package(name.to_string())
             };
-            let requirements = RequirementsSpecification::from_source(&source, &client_builder)
-                .await?
-                .requirements;
+            let requirements =
+                RequirementsSpecification::from_source(&source, &base_client_builder)
+                    .await?
+                    .requirements;
             resolve_names(
                 requirements,
                 &interpreter,
                 &settings,
                 &state,
-                connectivity,
+                &base_client_builder,
                 concurrency,
-                native_tls,
                 &cache,
                 printer,
             )

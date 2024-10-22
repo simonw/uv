@@ -51,9 +51,8 @@ pub(crate) async fn sync(
     python_preference: PythonPreference,
     python_downloads: PythonDownloads,
     settings: ResolverInstallerSettings,
-    connectivity: Connectivity,
+    base_client_builder: BaseClientBuilder<'_>,
     concurrency: Concurrency,
-    native_tls: bool,
     cache: &Cache,
     printer: Printer,
 ) -> Result<ExitStatus> {
@@ -184,9 +183,8 @@ pub(super) async fn do_sync(
     modifications: Modifications,
     settings: InstallerSettingsRef<'_>,
     logger: Box<dyn InstallLogger>,
-    connectivity: Connectivity,
+    base_client_builder: BaseClientBuilder<'_>,
     concurrency: Concurrency,
-    native_tls: bool,
     cache: &Cache,
     printer: Printer,
 ) -> Result<(), ProjectError> {
