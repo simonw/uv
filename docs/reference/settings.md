@@ -329,7 +329,6 @@ bypasses SSL verification and could expose you to MITM attacks.
 === "uv.toml"
 
     ```toml
-    
     allow-insecure-host = ["localhost:8080"]
     ```
 
